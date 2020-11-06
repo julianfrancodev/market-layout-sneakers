@@ -5,8 +5,14 @@ class ShoePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // body: CustomAppBar(text: 'For You',),
-        body: ShowSizePreview(),
+
+      body: Column(
+        children: [
+          CustomAppBar(text: 'For You',),
+          SizedBox(height: 20,),
+          ShowSizePreview(),
+        ],
+      ),
     );
   }
 }

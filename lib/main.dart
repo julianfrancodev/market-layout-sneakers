@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:market_layout_shoes/src/pages/shoe_detail_page.dart';
 import 'package:market_layout_shoes/src/pages/shoe_page.dart';
 
 void main(){
@@ -6,7 +7,7 @@ void main(){
     MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Shoes Market',
-      home: ShoePage(),
+      home: ShoeDetailPage(),
     )
   );
 }

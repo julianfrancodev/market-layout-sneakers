@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:market_layout_shoes/src/helpers/helpers.dart';
 import 'package:market_layout_shoes/src/widgets/custom_widgets.dart';
 
 class ShoePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    changeStatusDark();
     return Scaffold(
       body: Column(
         children: [
@@ -17,7 +19,7 @@ class ShoePage extends StatelessWidget {
                     text: 'For You',
                   ),
                   SizedBox(height: 20,),
-                  ShowSizePreview(),
+                  Hero(tag: 'zapato-1',child: ShowSizePreview()),
                   ShoeDescription(
                     title: "Nike Air Max 720",
                     description:

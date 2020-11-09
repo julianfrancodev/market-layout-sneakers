@@ -1,5 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:market_layout_shoes/src/models/shoe_model.dart';
+import 'package:market_layout_shoes/src/pages/shoe_detail_page.dart';
+import 'package:provider/provider.dart';
 
 class ShowSizePreview extends StatelessWidget {
   final bool fullScreen;
@@ -8,26 +12,34 @@ class ShowSizePreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(
-          horizontal: (fullScreen) ? 5 : 30, vertical: (fullScreen) ? 5 : 0),
-      child: Container(
-        width: double.infinity,
-        height: (this.fullScreen) ? 410 : 430,
-        decoration: BoxDecoration(
-            color: Color(0xffffcf53),
-            borderRadius: (!this.fullScreen)
-                ? BorderRadius.circular(50)
-                : BorderRadius.only(
-                    bottomLeft: Radius.circular(50),
-                    bottomRight: Radius.circular(50),
-                    topLeft: Radius.circular(40),
-                    topRight: Radius.circular(40))),
-        child: Column(
-          children: [
-            _ShowShadow(),
-            if (!this.fullScreen) _ShowSize(),
-          ],
+    return GestureDetector(
+      onTap: () {
+        if (!this.fullScreen) {
+          Navigator.push(context,
+              CupertinoPageRoute(builder: (context) => ShoeDetailPage()));
+        }
+      },
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+            horizontal: (fullScreen) ? 5 : 30, vertical: (fullScreen) ? 5 : 0),
+        child: Container(
+          width: double.infinity,
+          height: (this.fullScreen) ? 410 : 430,
+          decoration: BoxDecoration(
+              color: Color(0xffffcf53),
+              borderRadius: (!this.fullScreen)
+                  ? BorderRadius.circular(50)
+                  : BorderRadius.only(
+                      bottomLeft: Radius.circular(50),
+                      bottomRight: Radius.circular(50),
+                      topLeft: Radius.circular(40),
+                      topRight: Radius.circular(40))),
+          child: Column(
+            children: [
+              _ShowShadow(),
+              if (!this.fullScreen) _ShowSize(),
+            ],
+          ),
         ),
       ),
     );
@@ -61,19 +73,23 @@ class _BoxSizeShoe extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final shoeModel = Provider.of<ShoeModel>(context);
+
     return GestureDetector(
       onTap: () {
-        print(this.size);
+        final shoeModel = Provider.of<ShoeModel>(context, listen: false);
+        shoeModel.size = this.size;
       },
       child: Container(
         alignment: Alignment.center,
         width: 45,
         height: 45,
         decoration: BoxDecoration(
-            color: (this.size == 9) ? Color(0xfff1a23a) : Colors.white,
+            color: (this.size == shoeModel.size) ? Color(0xfff1a23a) : Colors.white,
             borderRadius: BorderRadius.circular(10),
             boxShadow: [
-              if (this.size == 9)
+              if (this.size == shoeModel.size)
                 BoxShadow(
                     color: Color(0xfff1a23a),
                     blurRadius: 10,
@@ -82,7 +98,7 @@ class _BoxSizeShoe extends StatelessWidget {
         child: Text(
           "${this.size.toString().replaceAll('.0', '')}",
           style: TextStyle(
-              color: (this.size == 9) ? Colors.white : Color(0xfff1a23a),
+              color: (this.size == shoeModel.size) ? Colors.white : Color(0xfff1a23a),
               fontSize: 16,
               fontWeight: FontWeight.bold),
         ),
@@ -94,13 +110,16 @@ class _BoxSizeShoe extends StatelessWidget {
 class _ShowShadow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+
+    final shoeModel = Provider.of<ShoeModel>(context);
+
     return Padding(
       padding: const EdgeInsets.all(50.0),
       child: Stack(
         children: [
           Positioned(bottom: 20, right: 0, child: _ContainerShadow()),
           Image(
-            image: AssetImage('assets/images/amarillo.png'),
+            image: AssetImage(shoeModel.assetImage),
           )
         ],
       ),

@@ -1,15 +1,22 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
+import 'package:market_layout_shoes/src/helpers/helpers.dart';
+import 'package:market_layout_shoes/src/models/shoe_model.dart';
 import 'package:market_layout_shoes/src/widgets/custom_widgets.dart';
+import 'package:provider/provider.dart';
 
 class ShoeDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+
+    changeStatusLight();
+
     return Scaffold(
       body: Column(
         children: [
           Stack(
             children: [
-              ShowSizePreview(fullScreen: true),
+              Hero(tag: 'zapato-1', child: ShowSizePreview(fullScreen: true)),
               Positioned(
                 top: 60,
                 left: 20,
@@ -19,7 +26,10 @@ class ShoeDetailPage extends StatelessWidget {
                     color: Colors.white,
                     size: 55,
                   ),
-                  onPressed: (){},
+                  onPressed: () {
+                    changeStatusDark();
+                    Navigator.pop(context);
+                  },
                   elevation: 0,
                   highlightElevation: 0,
                   backgroundColor: Colors.transparent,
@@ -115,10 +125,14 @@ class _PriceBuyNow extends StatelessWidget {
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
             ),
             Spacer(),
-            OrangeButton(
-              text: 'Buy Now',
-              width: 120,
-              height: 40,
+            Bounce(
+              delay: Duration(milliseconds: 1000),
+              from: 8,
+              child: OrangeButton(
+                text: 'Buy Now',
+                width: 120,
+                height: 40,
+              ),
             )
           ],
         ),
@@ -138,18 +152,21 @@ class _ColorsAndMore extends StatelessWidget {
             child: Stack(
               children: [
                 Positioned(
-                  child: _ColoredButton(Color(0xff364d56)),
+                  child: _ColoredButton(
+                      Color(0xff364d56), 4, 'assets/images/negro.png'),
                   left: 90,
                 ),
                 Positioned(
-                  child: _ColoredButton(Color(0xff2099f1)),
+                  child: _ColoredButton(
+                      Color(0xff2099f1), 3, 'assets/images/azul.png'),
                   left: 60,
                 ),
                 Positioned(
-                  child: _ColoredButton(Color(0xffffad29)),
+                  child: _ColoredButton(
+                      Color(0xffffad29), 2, 'assets/images/amarillo.png'),
                   left: 30,
                 ),
-                _ColoredButton(Color(0xffc6d642)),
+                _ColoredButton(Color(0xffc6d642), 1, 'assets/images/verde.png'),
               ],
             ),
           ),
@@ -167,15 +184,27 @@ class _ColorsAndMore extends StatelessWidget {
 
 class _ColoredButton extends StatelessWidget {
   final Color color;
+  final int index;
+  final String imageUrl;
 
-  _ColoredButton(this.color);
+  _ColoredButton(this.color, this.index, this.imageUrl);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 45,
-      height: 45,
-      decoration: BoxDecoration(color: this.color, shape: BoxShape.circle),
+    return FadeInLeft(
+      delay: Duration(milliseconds: index * 100),
+      duration: Duration(milliseconds: 300),
+      child: GestureDetector(
+        onTap: () {
+          final showModel = Provider.of<ShoeModel>(context, listen: false);
+          showModel.assetImage = this.imageUrl;
+        },
+        child: Container(
+          width: 45,
+          height: 45,
+          decoration: BoxDecoration(color: this.color, shape: BoxShape.circle),
+        ),
+      ),
     );
   }
 }
